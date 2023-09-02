@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function priorityQueue(){
+
+            function queueElement(element,priority){
+                this.element=element;
+                this.priority=priority;
+            }//再封装一个类的目的是专门用来添加属性
+
+            this.items=[];
+
+            //优先级队列的插入方式
+            priorityQueue.prototype.q=(element,priority)=>{//在类的原形上挂一个q方法
+                let qE=new queueElement(element,priority);
+                
+                if(this.items.length==0){
+                    this.items.push(qE)
+                }else{
+                    let s=false;
+                    for(let i of this.items){
+                        if(qE.priority<i.priority){
+                            this.items.splice(this.items.indexOf(i),0,qE);
+                            s=true;
+                            break//插入后跳出
+                        }
+                    };
+                    if(!s){this.items.push(qE)};
+                    }
+            }
+
+            
+            // 2.dequeue():从队列中删除前端元素
+            priorityQueue.prototype.dequeue = () => {
+            return this.items.shift()//返回元素本身
+            }
+
+            // 3.front():查看前端的元素
+            priorityQueue.prototype.front = () => {
+            return this.items[0]
+            }
+
+            // 4.isEmpty:查看队列是否为空
+            priorityQueue.prototype.isEmpty = () => {
+            return this.items.length == 0;
+            }
+
+            // 5.size():查看队列中元素的个数
+            priorityQueue.prototype.size = () => {
+            return this.items.length
+            }
+
+            // 6.toString():将队列中元素以字符串形式输出
+            priorityQueue.prototype.toString = () => {
+            let resultString = ''
+                for (let i of this.items){
+                resultString += i + ' '
+                }
+                return resultString
+            }
+        }
+        let pq=new priorityQueue()
+        pq.q('lili',90)
+        pq.q('wang',11)
+        pq.q('vivi',888)
+        pq.q('nini',567)
+        console.log(pq)
+    </script>
+</body>
+</html>

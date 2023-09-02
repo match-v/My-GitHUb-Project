@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+        function myPromise(excutor){
+            // 1. 基础架构
+            let self = this;//取出实例对象
+            self.status = 'pending';
+            self.value = null;
+            self.reason = null;
+
+            // 7. 发布订阅模式 支持异步
+            self.onFulfilledCallbacks = []
+            self.onRejectedCallbacks = [];
+
+            // 成功的回调
+            function resolve(value) {
+                if(self.status === 'pending') {
+                    self.value = value
+                    self.status = 'fulfilled'
+                    self.onFulfilledCallbacks.forEach(item => item(value))//item是成功状态时要调用的回调函数。value是回调函数所需参数
+                }
+            }
+            // 失败的回调
+            function reject(reason) {
+                if(self.status === 'pending') {
+                    self.reason = reason
+                    self.status = 'rejected'
+                    self.onRejectedCallbacks.forEach(item => item(reason))
+                }   
+            }
+            // 4. 使从实例传进去的函数立即执行
+            try {
+                excutor(resolve, reject)//接收的两个参数也是函数，分别是成功的回调和失败的回调。相当于new Promise((resolve,reject)=>)
+            } catch(err) {
+                reject(err)
+            }
+        }
+
+        // 2. then方法
+        myPromise.prototype.then = function(onFulfilled, onRejected){
+            // 6. 状态改了 就会调用.then()
+            onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : function (data) { resolve(data) }
+            onRejected = typeof onRejected === 'function' ? onRejected : function (err) { throw err }
+            // this => myPromise
+            let self = this
+            // 8. 订阅的操作
+            // if(self.status === "pending") {
+            //     self.onFulfilledCallbacks.push(onFulfilled)
+            //     self.onRejectedCallbacks.push(onRejected)
+            // }
+            // 10 链式调用
+            if(self.status === 'fulfilled'){
+                return new myPromise((resolve, reject) => {
+                    try {
+                        let x = onFulfilled(self.value)
+                        // 关键代码
+                        x instanceof myPromise ? x.then(resolve, reject) : resolve(x);
+                    } catch (err) {
+                        reject(err)
+                    }
+                })
+            }
+
+            if(self.status === "rejected"){
+                return new myPromise((resolve, reject) => {
+                    try{
+                        let x = onRejected(self.reason);
+                        x instanceof myPromise ? x.then(resolve, reject) : resolve(x);
+                    } catch (err){
+                        reject(err)
+                    }
+                })
+            }
+
+            if(self.status === "pending"){
+                return new myPromise((resolve, reject) => {
+                    self.onFulfilledCallbacks.push(()=>{
+                        let x = onFulfilled(self.value);
+                        x instanceof myPromise ? x.then(resolve, reject) : resolve(x);
+                    })
+                    self.onRejectedCallbacks.push(()=>{
+                        let x = onRejected(self.reason);
+                        x instanceof myPromise ? x.then(resolve, reject) : resolve(x);
+                    })
+                })
+            }
+        }
+
+        // 12. catch()
+        myPromise.prototype.catch = function(fn) {
+            return this.then(null, fn)
+        }
+
+        // 3. 构造函数立即执行
+        let demo = new myPromise((resolve, reject) => {
+            console.log('myPromise已完成')
+            setTimeout(() => {
+                // resolve(1) 状态只能改变一次
+                reject(1)
+            }, 1000)
+        })
+        demo.then(data => console.log(data)).catch(err=>console.log(err))
+        
+    </script>
+</body>
+</html>

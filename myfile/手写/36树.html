@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tree</title>
+</head>
+<body>
+    <script>
+        //根据中序遍历和后序遍历构造二叉树
+        var buildTree = function(inorder, postorder) {
+        if(!inorder.length || !postorder.length){
+            return null
+        }
+        let node = postorder.pop()//头节点
+        let index = inorder.indexOf(node) //头节点在中序遍历数组中的位置
+        let root = new TreeNode(node) //构造一棵树
+            root.left = buildTree(inorder.slice(0,index),postorder.slice(0,index))
+            root.right = buildTree(inorder.slice(index+1),postorder.slice(index))
+
+            return root
+
+        };
+        console.log(buildTree( [9,3,15,20,7],[9,15,7,20,3]))
+
+        //二叉树两个节点的公共祖先
+        var lowestCommonAncestor = function(root, p, q) {
+            if (root === p || root === q || !root) {return root;} 
+
+            //记录左右子树找到的情况
+            const isLeftTrue = lowestCommonAncestor (root.left, p, q);
+            const isRightTrue = lowestCommonAncestor (root.right, p ,q);
+            
+            
+            if (isLeftTrue && isRightTrue)return root;// 左右子树都找到目标节点
+            
+            if (!isLeftTrue && isRightTrue) return isRightTrue; // 左子树中未找到，右子树中找到目标节点
+            
+            if (isLeftTrue || !isRightTrue) return isLeftTrue;// 左子树找到一个目标节点或右子树中未找到
+            // 一个都没找到
+            else return null;
+        };
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Set(){
+             this.items={}//建立一个空对象
+            //has检查是否有某个值
+            Set.prototype.has=function(value){
+                return this.items.hasOwnProperty(value)
+            }
+            //add添加一个新的项
+            Set.prototype.add=(value)=>{
+                if(value==this.items[value]){
+                    return false
+                }else{
+                    this.items[value]=value//集合本身需要一个key属性，此处将key属性换成值本身value
+                }
+                return true
+            }
+            //remove移除某一项
+            Set.prototype.remove=(value)=>{
+                if(value!=this.items[value]){return false}
+                delete this.items[value]
+                return true
+            }
+            //clear清空
+            Set.prototype.clear=()=>{
+                this.items={}
+            }
+            //size
+            Set.prototype.size=function(){
+                return Object.keys(this.items).length
+            }
+            //values获取集合中的所有值
+            Set.prototype.values=function(){
+                return Object.keys(this.items)
+            }
+            
+            //union取并集
+            Set.prototype.union=function(otherObj){
+
+                let newObj=new Set()//创建一个新集合
+                
+                let values = this.values()//取出原集合所有值
+//  大无语，为什么就是不能成功调用上面方法//原因是因为values方法是箭头函数，为什么呢
+
+                for(let i=0;i<values.length;i++){
+                    newObj.add(values[i])//把当前全部值加到新集合
+                }
+                values=otherObj.values();//直接用上述声明后的变量也行，因为执行完就回收了？
+                for(let i=0;i<values.length;i++){
+                    newObj.add(values[i])//把另一个集合的值分别加入
+                }
+                return newObj
+            
+            }
+            //intersection取交集
+            Set.prototype.intersection=function(otherObj){//这里慎用箭头函数
+                let newObj=new Set()
+                                                //console.log(this)用箭头函数打印的是s2
+                let values=this.values()
+                // console.log(this.values())
+                for(let i=0;i<values.length;i++){
+                    if(otherObj.has(values[i])){
+                        newObj.add(values[i])
+                    }
+                    
+                }
+                return newObj
+            }
+            //different差集
+            Set.prototype.different=function(otherObj){
+                let newObj=new Set()
+                let values=this.values()
+                for(let i=0;i<values.length;i++){
+                    newObj.add(values[i])
+                    if(otherObj.has(values[i])){
+                        newObj.remove(values[i])
+                    }
+                }
+                return newObj
+            }
+            //子集
+            Set.prototype.child=function(otherObj){
+                
+                if(otherObj.size()>this.size()){return false}
+                for(let i=0;i<otherObj.size();i++){
+                    if(!this.has(otherObj.values[i])){
+                        return false
+                    }
+                }
+                 return true
+            }
+        }
+        
+        var s1=new Set()
+        s1.add('qq')
+        s1.add('abd')
+        s1.add('dgu')
+        s1.add(999)
+        // // console.log(s.has(78))
+        // // console.log(s.items)
+        // // console.log(s1.remove(78))
+        // // console.log(s.clear())
+        var s2=new Set()
+        s2.add('77')
+        s2.add('89')
+        s2.add('999')
+        // console.log(s1.union(s2))
+        console.log(s1.intersection(s2))
+        console.log(s1.different(s2))
+        console.log(s1.child(s2))
+
+        
+
+    </script>
+</body>
+</html>

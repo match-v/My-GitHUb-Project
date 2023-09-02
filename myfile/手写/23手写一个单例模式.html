@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //利用闭包写了单例模式
+        var Singleton = (function(){ 
+            var instance; 
+            var CreateSingleton = function (name) { 
+                this.name = name; 
+                if(instance) { return instance; }//实例已经创建就返回当前实例即可
+                this.getName(); 
+                return instance = this; 
+            }
+
+            CreateSingleton.prototype.getName = function() { //添加方法
+                console.log(this.name) 
+            }
+
+            return CreateSingleton; //返回的是一个函数
+        })(); 
+        // 创建实例对象
+        var a = new Singleton('a'); 
+        var b = new Singleton('b'); 
+        console.log(a===b);//true
+        console.log(a)
+
+        //直接写的单例模式
+        let instance = null;
+        function User() {  
+            if(instance) {    
+                return instance;  
+            }  
+            instance = this;  
+            this.name = 'Peter';  
+            this.age = 25;  
+            return instance;
+        }
+
+        const user1 = new User();
+        const user2 = new User();
+        console.log(user1 === user2); // 打印 true
+        console.log(user1)
+
+    </script>
+</body>
+</html>

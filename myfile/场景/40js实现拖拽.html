@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 清除默认 */
+    *{
+      margin: 0px;
+      padding: 0px;
+    }
+    #drag {
+      width: 200px;
+      height: 200px;
+      background: red;
+      cursor: pointer;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="drag"></div>
+
+  <!-- 
+    1.我们当左键点击时，需要记录当前的鼠标点击位置相对于该元素左上角的x，y坐标，这里我们使用diffX和diffY来表示。
+    2.然后我们移动时需要不断计算当前元素距离浏览器左边和上边的距离。然后给元素进行赋值。
+    3.当鼠标抬起时，然后取消鼠标移动事件和鼠标抬起事件。 
+  -->
+
+  <script>
+
+    window.onload = function() {
+      //获取drag元素
+      let drag = document.getElementById("drag")
+      //当鼠标按下时
+      drag.onmousedown = function(e) {
+        //做到浏览器兼容
+        e = e || window.event  
+        let diffX = e.clientX - drag.offsetLeft
+        let diffY = e.clientY - drag.offsetTop
+        //当拉着box移动时
+        document.onmousemove = function(e) {
+          // 浏览器兼容
+          e = e || window.event
+
+          // 鼠标当前坐标减去原始相对差值后距浏览器左上的距离
+          let left = e.clientX - diffX
+          let top = e.clientY - diffY
+
+          //边界1：小于零只能说明方块移动到左上边界处了，并且鼠标在方块内相对向左上移动了
+          if(left < 0) {
+            left = 0
+          }
+          //边界2：方块移动到右下边界了，并且鼠标在方块内相对向右下移动了
+          else if(left > window.innerWidth - drag.offsetWidth){
+            console.log(window.innerWidth)
+            left = window.innerWidth - drag.offsetWidth
+          }
+
+          if(top < 0) {
+            top = 0
+          }else if(top > window.innerHeight - drag.offsetHeight) {
+            top = window.innerHeight - drag.offsetHeight
+          }
+
+
+          drag.style.left = left + 'px'
+          drag.style.top = top + 'px'
+        }
+
+        // 当鼠标抬起时
+        document.onmouseup = function(e) {
+          this.onmousemove = null
+          this.onmouseup = null
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

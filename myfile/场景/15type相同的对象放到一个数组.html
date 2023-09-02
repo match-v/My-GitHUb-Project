@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        list = [
+        {type: "油料", name: "花生"},
+        {type: "水果类", name: "血橙"},
+        {type: "水果类", name: "猕猴桃"},
+        {type: "水果类", name: "草莓"},
+        {type: "蔬菜类", name: "田藕"},
+        {type: "蔬菜类", name: "辣椒"},
+        {type: "粮食", name: "水稻"},
+        {type: "粮食", name: "小麦"}
+
+    ]
+        let res={}
+        list.forEach(ele => {
+            if(ele.type in res){
+                if(Array.isArray(res[ele.type])){
+                    res[ele.type]=[...res[ele.type],ele.name]
+                }else{
+                    res[ele.type]=[res[ele.type],ele.name]
+                }
+            }else{
+                res[ele.type]=[ele.name]
+            }
+        });
+        console.log(res)
+        
+
+    </script>
+</body>
+</html>

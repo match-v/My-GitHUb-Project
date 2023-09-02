@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var calculate = function(s) {
+        let sign = '+', n = 0, c, stack = [];
+        for (let i = 0; i <= s.length; i++) {
+            //这里必须要多循环一次，将最后一个数通过做后一次循环进行push或计算操作
+            c = s.charAt(i);
+            if (c === ' ') continue;
+            if (c <= '9' && c >= '0') {
+                n = n * 10 + parseInt(c);
+                continue;//跳出本次循环
+            }
+            if (sign === '+') {
+                stack.push(n);
+            } else if (sign === '-') {
+                stack.push(-n);
+            } else if (sign === '*') {
+                stack.push(stack.pop() * n)
+            } else if (sign === '/') {
+                stack.push(Math.trunc(stack.pop() / n))
+            }
+            sign = c;
+            n = 0;
+        }
+        return stack.reduce((acc, n) => acc + n, 0);
+        //关于reduce:array.reduce((pre, cur, index, arr)=>{}, init);            
+
+    };
+    
+    //pre: 必需。初始值, 或者计算结束后的返回值。cur： 必需。当前元素。...可选
+    var arr = [1, 2, 3,4 ,5,6, 4, 3, 8, 1]
+    // 数组去重：
+    // 方法7 ：for + includes
+    function newArrFn (arr) {
+      // 利用includes 检查新数组是否包含原数组的每一项
+      // 如果不包含，就push进去
+      let newArr = []
+      for(let i = 0;i<arr.length;i++){
+        newArr.includes(arr[i]) ? newArr:  newArr.push(arr[i]) 
+      };
+      return newArr
+    }
+    console.log(newArrFn(arr));
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //4 4 4
+        for (var i = 1; i <= 3; i++) {
+            setTimeout(function () {
+                console.log(i);
+            }, 1000);
+        }
+
+        //下面两种写法等价
+        //1 2 3
+        for (var i = 1; i <= 3; i++) {
+            (function (index) {
+                setTimeout(function () {
+                    console.log(index);
+                }, 1000);
+            })(i)
+        }
+        //1 2 3
+        for (let i = 1; i <= 3; i++) {
+            setTimeout(function () {
+                console.log(i);
+            }, 1000);
+        }
+
+
+   </script>
+    
+</body>
+</html>

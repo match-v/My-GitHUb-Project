@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function printMatrix(matrix){
+            // write code here
+            //input 
+            // 1  2   3   4
+            // 5  6   7   8
+            // 9  10  11  12
+            // 13 14  15  16
+            
+            //output
+            // 1  2  3  4
+            // 8 12 16 15
+            // 14 13 9  5
+            // 6  7  11 10
+            var rows = matrix.length;	//行数 4
+            var cols = matrix[0].length;	//列数 4
+            var result = [];
+            
+            if(rows==0 && cols==0) 
+                return result;
+            var left = 0;	//0 3 0 3
+            var right = cols-1;
+            var top = 0;
+            var bottom = rows-1;
+            
+            
+            while(left<=right && top<=bottom){
+                for(let i=left;i<=right;i++){
+                    result.push(matrix[top][i]);//1 2 3 4
+                }
+                for(let i=top+1;i<=bottom;i++){
+                    result.push(matrix[i][right]);//8 12 16
+                }
+                
+                if(top != bottom){
+                    for(let i=right-1;i>=left;i--)
+                        result.push(matrix[bottom][i]);//15 14 13
+                }
+                if(left != right){
+                    for(let i=bottom-1;i>=top+1;i--){
+                        result.push(matrix[i][left]);//9 5
+                    }
+                }
+                left += 1;
+                right -= 1;
+                top += 1;
+                bottom -= 1;
+            }
+            return result;
+}
+    </script>
+</body>
+</html>

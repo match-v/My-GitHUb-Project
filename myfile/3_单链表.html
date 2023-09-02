@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function LinkList(){
+
+            function Node(data){//节点和节点属性
+                this.data=data;
+                this.next=null;
+            };
+            this.head=null;//初始化
+            this.length=0;
+
+            //添加一个节点
+            LinkList.prototype.append=function(data){
+                if(this.length==0){//对于空链表：先创建一个节点，再把原本指向空的head放到这个节点上
+                    let node=new Node(data)
+                    this.head=node
+                }else{//对于非空链表：创建一个current变量，作为第一个节点;创建一个新节点
+                    let current=this.head
+                    let node=new Node(data)
+                    while(current.next){//只要节点的下一节点不为空，就一直继续找
+                        current=current.next
+                    }
+                    current.next=node//下一个节点为空，也就是当前节点就是最后一个节点了，就让next为新节点
+                }
+                this.length+=1//长度更新，加1
+            };
+            //toString方法
+            LinkList.prototype.toString=function(){
+                var items=[];
+                let current=this.head//先找第一个节点
+                while(current){
+                    items.push(current)
+                    current=current.next    
+                }
+                return items
+            }
+            //insert方法
+            LinkList.prototype.insert=function(position,data){
+                if(position<0||position>this.length){return false}
+                let iN=new Node(data)
+                if(position==0){
+                    iN.next=this.head//新节点的next为头节点指向的
+                    this.head=iN//头节点指向新节点
+                }else{
+                    let index=0
+                    // let previous=null......不需要双指针
+                    let current=this.head
+                    while(++index<position){
+                        //previous=current
+                        current=current.next
+                    }
+                    iN.next=current.next
+                    current.next=iN    
+                }
+                this.length+=1
+                return true
+            }
+            //get方法查找元素
+            LinkList.prototype.get=function(position){
+                if(position < 0 || position >= this.length){return null}
+                let current=this.head
+                let index=0
+                while(index++<position){
+                    current=current.next
+                }
+                return current.data//因为元素都经过node创建，所以都挂有data属性了，按链查找
+            }
+            //indexof取出元素下标
+            LinkList.prototype.indexof=function(data){
+                let index=0
+                let current=this.head
+                
+                while(current){
+                    if(data==current.data){return index}
+                    index+=1
+                    current=current.next
+                    }
+                return -1
+            }
+            //update替换某位置的元素
+            LinkList.prototype.update=function(position,data){
+                if(position < 0 || position >= this.length){return null}
+                let current=this.head
+                let index=0
+                while(index++<position){
+                    index+=1
+                    current=current.next
+                }
+                current.data=data
+                return true
+
+            }
+            //removeAt移除某位置的元素
+            LinkList.prototype.removeAt=function(position){
+                if(position < 0 || position >= this.length){return null}
+                let current=this.head
+                if(position==0){this.head=this.head.next}
+                else{
+                    
+                    let index=0
+                    let previous=null//加一个先前节点
+                    while(index++<position){
+                        previous=current//当current未指向下一节点时获取
+                        current=current.next
+                    }
+                    previous.next=current.next
+                }
+                //this.length-=1
+                return current.data
+            }
+            //remove移除某元素
+            LinkList.prototype.remove=function(data){
+                let position=this.indexof(data)
+                return this.removeAt(position)
+            }
+            //isEmty
+            LinkList.prototype.isEmpty=function(){
+                // if(this.length=0){
+                //     return ture
+                // }
+                // return false
+                return this.length == 0
+            }
+            //
+
+        }
+        let a=new LinkList()
+        a.append(4)
+        a.append(5)
+        a.append(6)
+        a.append(8)
+        a.insert(4,100)
+        console.log(a.toString())
+        // console.log(a.get(3))
+        // console.log(a.indexof(8))
+        // console.log(a.update(2,999))
+        // console.log(a.remove(6))
+        // console.log(a.toString())
+        // console.log(a.isEmpty())
+
+    </script>
+</body>
+</html>

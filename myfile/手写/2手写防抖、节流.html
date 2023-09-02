@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #container{
+            height: 300px;
+            width: 100vw;
+            background-color: cadetblue;
+            text-align: center;
+            vertical-align: middle;
+            margin-bottom: 100px;
+        }
+        #container2{
+            height: 300px;
+            width: 100vw;
+            background-color: rgb(66, 87, 87);
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="container"></div>
+    <div id="container2"></div>
+
+    <script>
+    //防抖：事件响应函数在过一段时间后再执行，如果这段时间内重复调用，则重新开始计时
+        //应用场景：scorll事件滚动触发||搜索框输入查询||表单验证/按钮提交
+        function debounce(fn,delay){
+            let timer ;
+            return function() {//将响应事件返回，执行  
+                   // console.log(this) //这里的this指向container:因为debounce是container调用的 
+                   let that=this 
+                   //console.log(arguments)//保存函数执行时需要用的形参实参           
+                   let args=arguments 
+
+                    clearTimeout(timer)//每次执行时先清空当前计时
+                    timer = setTimeout(function(){
+                        fn.call(that,args)
+                    },delay)                 
+            }
+        }
+        //test1
+        let count=0;
+        let container=document.querySelector("#container")
+        function doSomeThing(e){
+            container.innerHTML=count++
+            console.log(this)//响应函数可能用到this：这里如果不进行this的更改，则因为是定时器调用，会指向window
+            console.log(e)//响应函数可能用到参数
+        }
+
+        container.onmousemove=debounce(doSomeThing,1000);
+        //这里其实还有第三个参数，代表初次是否立即执行.....还应该有一个取消防抖函数操作（拿到返回值，进行一个cancel的操作：清除定时器）
+    //节流：重复触发，每隔固定时间，只执行一次
+        function throttle(fn, wait) {
+            let timer
+            let old=0
+            return function () {//此种写法，第一次会立即执行，最后一次不会执行
+                let _this = this
+                let args = arguments
+                let now=new Date()//获取函数执行时的时间
+                if (now-old>wait) {
+                    fn.apply(_this, arguments)
+                    old=now
+                }
+            }
+            // return function () {//此种写法，第一次不会立即执行，最后一次会执行
+            //     let _this = this
+            //     let args = arguments                
+            //     if (!timer) {
+            //         timer= setTimeout(()=>{
+            //             timer=null//因为执行过之后，timer一直为有值状态，就不会再进来执行，执行之前可以先改变状态
+            //             fn.apply(_this, arguments)
+            //         },wait)
+            //     }
+            // }
+        }
+        //test2
+        let count2=0;
+        let container2=document.querySelector("#container2")
+        function doSomeThing2(e){
+            container2.innerHTML=count++
+            console.log(this)//响应函数可能用到this：这里如果不进行this的更改，则因为是定时器调用，会指向window
+            console.log(e)//响应函数可能用到参数
+        }
+
+        container2.onmousemove=throttle(doSomeThing2,1000);
+</script>
+</body>
+</html>

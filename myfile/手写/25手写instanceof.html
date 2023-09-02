@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //instanceof是用来检测一个实例的原型链是不是等于生成这个实例的构造函数的原型
+        function myInstanceOf(a,B){//首先应该是两个参数
+            let Obj=B.prototype
+            let Ins=a.__proto__
+            while(true){//确保持续循环
+                if(Ins==null){//直到为空都没有返回成功，那就是失败
+                    return false
+                }
+                if(Obj==Ins){
+                    return true
+                }
+                Ins=Ins.__proto__
+            }
+        }
+        let fun=new Function()
+        let arr=new Array()
+        console.log(fun instanceof Object)
+        console.log(myInstanceOf (fun,Object))
+    </script>
+</body>
+</html>

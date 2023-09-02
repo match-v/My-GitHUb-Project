@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const preOrder = (node, res) => {
+            if (node === null) return;
+            res.push(node.value);
+            preOrder(node.left);
+            preOrder(node.right);
+        };
+
+        const midOrder = (node, res) => {
+            if (node === null) return;
+            midOrder(node.left);
+            res.push(node.value);
+            midOrder(node.right);
+        };
+
+        const beOrder = (node, res) => {
+            if (node === null) return;
+            beOrder(node.left);
+            beOrder(node.right);
+            res.push(node.value);
+        };
+
+        const travel = (root, solution) => {
+            const res = [];
+            solution(root, res);
+            return res;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function hashTable(){
+            this.storage=[]//数组
+            this.count=0//已经存储的元素个数
+            //装填因子：loadFactor > 0.75时需要扩容；loadFactor < 0.25时需要减少容量
+
+            this.limit=7//初始长度
+
+            hashTable.prototype.hashFunc=function(str,size){
+            let hashCode=0
+            for(i=0;i<str.length;i++){
+                hashCode = 37 * hashCode + str.charCodeAt(i)//多项式算法,质数一般取37
+            }
+            //取余
+            let index=hashCode%size
+            return index
+            }
+
+            //put
+            hashTable.prototype.put=function(key,value){
+
+                let index=this.hashFunc(key,this.limit)
+                let bucket=this.storage[index]//桶数组,给桶编号，注意这里是乱序
+                if(bucket==null){//此位置未有过桶
+                    bucket=[]//创建一个空桶
+                    this.storage[index]=bucket//放一个空桶在索引处
+                }
+                for(let i=0;i<bucket.length;i++){
+                    let tuple=bucket[i]
+                    if(tuple[0]==key){
+                        tuple[1]=value
+                    }
+                }
+                bucket.push([key,value])
+                this.count+=1
+                
+            }
+            //get
+            hashTable.prototype.get=function(key){
+                let index=this.hashFunc(key,this.limit)
+                let bucket=this.storage[index]
+                if(bucket==null){return null}
+                for(let i=0;i<bucket.length;i++){
+                    let tuple=bucket[i]
+                    if(tuple[0]==key){return tuple[1]}
+                }
+                return null
+            }
+            //remove
+            hashTable.prototype.remove=function(key){
+                let index=this.hashFunc(key,this.limit)
+                let bucket=this.storage[index]
+                if(bucket==null){return null}
+                for(let i=0;i<bucket.length;i++){
+                    let tuple=bucket[i]
+                    if(tuple[0]==key){
+                        bucket.splice(i,1)//这里不能写bucket[i].splice(i,1)，bucket[i]不能代表编号为i的桶
+                        this.count -= 1 
+                        return tuple[1] 
+                    }
+                }
+                return null
+            }
+            //isEmpt
+            HashTable.prototype.isEmpty = function(){
+                return this.count == 0
+            }
+
+            //size
+            HashTable.prototype.size = function(){
+                return this.count
+            }
+
+        }
+        let h=new hashTable()
+        h.put('add',1)
+        h.put('rt',6)
+        h.put('dg',8)
+        h.put('sf',4)
+        console.log(h)
+        console.log(h.remove('add'))
+        console.log(h.get('dg'))
+        console.log(h)
+    </script>
+</body>
+</html>

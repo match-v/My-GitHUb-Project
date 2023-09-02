@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <script>
+        function deepCopy(obj){
+            let newObj=obj.constructor===Array?[]:{}//只有数组和对象两种可能
+            for(let k in obj){
+                if (obj.hasOwnProperty(k)){//前提是有这个属性
+                    newObj[k] = typeof obj[k] === 'object' ? deepCopy(obj[k]) : obj[k]
+                }    
+            } 
+            return newObj   
+        }
+        //test
+        var obj = {
+            id: 1,
+            name: 'andy',
+            fun:function link(){
+                console.log("点击")
+            },
+            msg: {
+                age: 18
+            },
+            color: ['pink', 'red']
+        };
+        let res=deepCopy(obj)
+        obj.msg=[22,33]//更改不会受影响
+        console.log(obj,res)
+
+        console.log(Array instanceof Object )
+        console.log(Array.prototype.__proto__ ===Object.prototype )
+     </script>
+</body>
+</html>

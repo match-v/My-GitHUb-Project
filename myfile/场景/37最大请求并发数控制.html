@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //场景：前端页面中需要同时发送20个请求
+            //但服务端限制最多只能同时发送10个请求，
+            //当前请求执行完成后，释放队列空间，自动执行下一个任务
+            //任务的执行是自动开始的
+
+        function createTask(i){//生成promise形式的任务
+            return ()=>{
+                return new Promise((resolve,reject)=>{
+                    setTimeout(()=>{//异步
+                        resolve(i)                        
+                    },2000)
+                })
+            }
+        }
+
+        class TaskQueue{//封装任务队列
+            constructor(){
+                this.max=10//最大并发数
+                this.taskList=[]//存储任务
+                setTimeout(()=>{//确保添加到任务队列后自动执行该异步方法
+                    this.run()
+                })
+            }
+            addTask(task){
+                this.taskList.push(task)
+            }
+            run(){
+                const length=this.taskList.length//取出长度
+                if(length===0){return}//退出
+                const cur=Math.min(length,this.max)//保证并发的数量不会超过10
+                
+                for(let i=0;i<cur;i++){
+                    
+                    
+                    this.max--//进来执行时，可用空位置减少
+                    const task=this.taskList.shift()//取出队列前的任务
+
+                    task().then(res=>{
+                        console.log(res)
+                    }).catch(err => {
+                        console.log(err)
+                    }).finally(()=>{
+                        this.max++//每执行一个任务，就释放一个位置
+                        console.log("max是"+this.max)
+                        console.log("cur是"+cur)
+                        this.run()//自动的继续执行run方法
+                    })
+                }
+            }
+        }
+
+        const taskQueue=new TaskQueue()//生成任务队列的实例
+        for(let i=0;i<30;i++){
+            const task=createTask(i)//创建
+            taskQueue.addTask(task)//添加到taskList  
+        }
+        //首先把20个回调放入taskList->等待两秒后执行
+        //放入taskList之后自动调用了run方法:
+            //->max=10,cur=10,循环了10次后，max=0，taskList里取出来了前10个，放去js的任务队列里，是异步微任务，等待两秒后才能.then
+            //->两秒后setTimeout回调执行完，按顺序执行.then: finally里，连续max=0+1；0-9依次输出结果；并且连续调用了10次run方法
+            //->其中输出结果0后，调用run方法，cur=1,max=0;取出第10个任务放入js任务队列max=1;第11个 max=1;...放这10个任务的时候都是max=0+1
+            //->第一轮10个输出完成后，因为for循环，再两秒后执行下一轮
+
+        //总结：前10个执行时，中间10个入队。。。
+
+        
+
+    </script>
+</body>
+</html>

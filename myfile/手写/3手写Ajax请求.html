@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var Ajax={
+            get:function(url,callback){
+                let xhr=new XMLHttpRequest()
+                xhr.open("GET",url,false)//第三个参数为 否 异步执行
+                xhr.send()
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState===4){
+                        if(xhr.status>=200&&xhr.status<305){
+                            console.log(xhr.responseText)
+                            callback(xhr.responseText)//设置回调对请求回来的数据进行处理
+                        }
+                    }
+                }
+            },
+            post:function(data,url,callback){
+                let xhr=new XMLHttpRequest()
+                xhr.open("POST",url,true)//是异步执行
+                //设置请求头
+                xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+                xhr.send(data)//请求参数，内容等
+
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState===4){
+                        if(xhr.status>=200&&xhr.status==304){
+                            console.log(xhr.responseText)
+                            callback(xhr.responseText)
+                        }
+                    }
+                }
+
+
+            }
+            
+        }
+    </script>
+</body>
+</html>

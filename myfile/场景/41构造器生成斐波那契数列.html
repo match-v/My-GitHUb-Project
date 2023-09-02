@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function* fib(n) {
+      if (n < 0) return;
+      let f0 = 1,
+        f1 = 1,
+        count = 0;
+      while (count < n) {
+        yield f0;
+        [f0, f1] = [f1, f0 + f1];
+        count++;
+      }
+    }
+    
+    for(let n of fib(10)){
+      console.log(n);
+    }
+  </script>
+</body>
+</html>

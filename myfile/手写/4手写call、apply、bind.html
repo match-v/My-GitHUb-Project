@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Function.prototype.myCall = function (context) {//context是我们要将this绑定的对象
+            // 先判断是不是函数在调用
+            if (typeof this !== 'function') {throw new TypeError("Not a Function")}
+
+            // 不传参数默认为window
+            context = context || window
+
+            // 保存this
+            context.fn = this//为当前对象添加属性，把原对象写到这
+            // 保存参数
+            let args = Array.from(arguments).slice(1)   //Array.from 把伪数组对象转为数组
+
+            // 调用函数
+            let result = context.fn(...args)
+
+            delete context.fn//清除添加的
+            return result
+
+    }
+
+    Function.prototype.myApply = function (context) {
+      
+      if (typeof this !== "function") {
+        throw new TypeError("Not a Function")
+      }
+
+      
+      context = context || window
+      context.fn = this
+
+      // 是否传参
+      let result
+      if (arguments[1]) {
+        result = context.fn(...arguments[1])
+      } else {
+        result = context.fn()
+      }
+
+      delete context.fn
+      return result
+    }
+    Function.prototype.myBind = function(context){
+      
+      if(typeof this !== "function") {
+        throw new TypeError("Not a Function")
+      }
+
+      // 保存调用bind的函数
+      const _this = this 
+      // 保存参数
+      const args = Array.prototype.slice.call(arguments,1)
+
+      // 返回一个函数
+      return function F () {
+        // 判断是不是new出来的
+        if(this instanceof F) {
+          // 如果是new出来的
+          // 返回一个空对象，且使创建出来的实例的__proto__指向_this的prototype，且完成函数柯里化
+          return new _this(...args,...arguments)
+        }else{
+          // 如果不是new出来的改变this指向，且完成函数柯里化
+
+//返回的是一个改变了this指向的新函数
+          return _this.apply(context,args.concat(...arguments))
+        }
+      } 
+    }
+
+
+
+
+    </script>
+</body>
+</html>

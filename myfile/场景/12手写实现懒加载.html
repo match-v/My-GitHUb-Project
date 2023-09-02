@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="0.gif" data="0.img" alt="">
+    <img src="0.gif" data="1.img" alt="">
+    <img src="0.gif" data="2.img" alt="">
+    <img src="0.gif" data="3.img" alt="">
+    <img src="0.gif" data="4.img" alt="">
+    <img src="0.gif" data="5.img" alt="">
+    <img src="0.gif" data="6.img" alt="">
+
+    <!-- 现在实现一个懒加载功能，先显示的gif加载图片 -->
+    <script>
+        let len=document.getElementsByClassName("img").length
+        let img=document.getElementsByClassName("img")
+
+        let n=0//避免图片的重复加载
+
+        lazyLoad()
+        window.onscroll=lazyLoad//窗口滚动条绑定懒加载函数，滚动事件触发时则调用
+
+        function lazyLoad(){
+
+            let seeHeight=document.documentElement.clientHeight//文档可见区域
+            let scrollTop=document.documentElement.scrollTop||document.body.scrollTop//滚动条距离上端的位置
+            
+            for(let i=0;i<len;i++){
+                if(img[i].offsetTop<seeHeight+scrollTop){//图片距离可见区域最上面的高度
+                    if(img[i].getAttribute("src")=="0.gif"){
+                        img[i].src=img[i].getAttribute("src")
+                    }
+                    n=i+1
+                }
+            }
+        }
+    </script>
+</body>
+</html>

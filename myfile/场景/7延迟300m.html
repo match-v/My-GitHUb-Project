@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">点击</button>
+    <script>
+        var btn=document. getElementById("btn")
+        console.log(btn)
+        tap(btn,()=>alert("ahhahhahhah"))
+
+        //封装函数,处理延迟300ms问题
+    function tap(obj, callback) {
+        var isMove = false;
+        var startTime = 0;
+        obj.addEventListener('touchstart', function () {
+            startTime += Date.now();
+        })
+        obj.addEventListener('touchmove', function () {
+            isMove = true;
+        })
+        obj.addEventListener('touchend', function () {
+            if (!isMove && (Date.now() - startTime) < 150) {
+                callback && callback();
+            }
+            isMove = false;
+            startTime = 0;
+        })
+    }
+
+
+
+    </script>
+</body>
+</html>

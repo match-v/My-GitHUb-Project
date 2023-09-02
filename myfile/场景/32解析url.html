@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    // 解析URL，实现一个函数parseUrl使，
+    // parseUrl('https://www.meituan.com/index.html?a=test&b=2.1')
+    // 返回 {a:'test', b: 2.1}
+    find('https://www.meituan.com/index.html?a=test&b=2.1')
+    function find(urlStr){
+        let flag=urlStr.indexOf("?")
+        let target=urlStr.slice(flag+1)
+        let arr=target.split("&")
+    
+        let res={}
+        arr.forEach(e => {
+            let index=e.indexOf("=")
+            let key=e.slice(0,index)
+            let val=e.slice(index+1)
+            if(Number.isNaN(Number(val))){
+                res[key]=val
+            }else{
+                res[key]=parseFloat(val)
+            }
+        });
+        console.log(res)
+    }
+    console.log(Number.isNaN(Number(3)))
+    </script>
+</body>
+</html>

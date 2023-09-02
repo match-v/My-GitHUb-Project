@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //手写flat：递归
+        const arr0 = [1,[2,3],[4,[5,[6]],7]];
+        function myFlat(arr){
+            let res=[]
+            for(let i=0;i<arr.length;i++){
+                if(Array.isArray(arr[i]) ){
+                   res= res.concat(myFlat(arr[i])) //因为concat是不对原数组做更改的，所以要接一下                  
+                }else{
+                    res=res.concat(arr[i])
+                }
+            }
+            return res
+        }
+        console.log(myFlat(arr0))
+        //方法二：some+concat
+        const flatten2 = (arr) => {
+            while(arr.some(item=>Array.isArray(item))){   //some返回的是布尔值，并且找到第一个符合条件的就终止          
+                arr = [].concat(...arr);//每次会展开一层，从外向内,再进行拼接
+                console.log(arr)
+            }
+            return arr;
+        };
+        console.log(flatten2(arr0));
+        //方法三：toString().split(',')
+        let res=[]
+        const flatten3 = (arr) => {
+            res=arr.toString().split(',').map(e=> e*1)//先转化为字符串，再以','分割为数组,再将字符串数组转为数字数组
+            return res
+        };
+        console.log(flatten3(arr0));
+        
+        const arr1 = [1,[2,3],[4,[5,[6]],7]]
+        console.log("test",[].concat(...arr1))
+    </script>
+</body>
+</html>

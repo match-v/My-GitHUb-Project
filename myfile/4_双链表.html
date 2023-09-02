@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function doubleList(){
+            function Node(data){
+                this.data=data
+                this.previous=null
+                this.next=null
+            }
+            this.head=null
+            this.tail=null
+            this.length=0
+
+            //append在最后添加一个节点
+            doubleList.prototype.append=(data)=>{
+                let node=new Node(data)
+                if(this.length==0){    
+                    this.head=node
+                    this.tail= node
+                }else{
+                    node.previous=this.tail
+                    this.tail.next=node//注意写法//这里不能直接写this.next
+                    this.tail=node
+                }
+                 this.length+=1
+            }
+            //toString方法
+            doubleList.prototype.toString=()=>{//从前到后
+                let strlist=''
+                let current=this.head
+                while(current){
+                    strlist=strlist+current.data+' '
+                    current=current.next   
+                }
+                return strlist
+            }
+            doubleList.prototype.forwordToStr=()=>{//从后往前
+                let strlist=''
+                let current=this.tail
+                while(current){
+                    strlist=strlist+current.data+' '
+                    current=current.previous   
+                }
+                return strlist
+            }
+            //insert方法：空链表 非空首插 非空尾插(append) 中间插
+            doubleList.prototype.insert=(position,data)=>{
+                let node=new Node(data)
+                if(position<0||position>this.length){return false}//先进行越界判断哦
+                if(this.length==0){    
+                    this.head=node
+                    this.tail= node
+                }else{
+                    if(position==0){
+                        node.next=this.head
+                        this.head.previous=node//这里不能直接写this.previous
+                        this.head=node    
+                    }else if(position==this.length){
+                        node.previous=this.tail
+                        this.tail.next=node
+                        this.tail=node
+                    }else{
+                        let current=this.head
+                        let index=0
+                        while(index<position){
+                            current=current.next
+                            index+=1
+                        }
+                        node.previous=current.previous
+                        current.previous.next=node
+                        current.previous=node//当前节点的上一节点
+                        node.next=current
+                    }
+                    this.length+=1
+                    return true
+                }
+            }
+            //get方法，得到某位置的元素【可以根据position和长度的一半进行对比，决定从头还是从尾开始遍历】
+            doubleList.prototype.get=(position)=>{
+                if(position < 0 || position >= this.length){return null}
+                let current=this.head
+                let index=0
+                while(index++<position){
+                    current=current.next
+                }
+                return current.data
+                }
+            //indexOf
+            doubleList.prototype.indexof=function(data){
+                let index=0
+                let current=this.head    
+                while(current){
+                    if(data==current.data){return index}
+                    index+=1
+                    current=current.next
+                    }
+                return -1
+            }
+            //update修改某位置元素
+            doubleList.prototype.update=function(position,data){
+                if(position < 0 || position >= this.length){return null}
+                let current=this.head
+                let index=0
+                while(index++<position){
+                    index+=1
+                    current=current.next
+                }
+                current.data=data
+                return true
+
+            }
+            //removeAt移除某位置的元素:只有一个元素 非空第一个 非空最后一个 非空中间
+            doubleList.prototype.removeAt=function(position){
+                if(position < 0 || position >= this.length){return null}
+                let current=this.head//一定要写在最外面
+                if(this.length==1){
+                    this.head=null
+                    this.tail=null
+                    this.length=0
+                }else{
+                    if(position==0){
+                        this.head.next.previous=null
+                        this.head=this.head.next
+                    }else if(position==this.length-1){
+                        current=this.tail//指针改变前记录一下当前指针，便于返回
+                        this.tail.previous.next=null
+                        this.tail=this.tail.previous
+                    }else{
+                        let index=0
+                        while(index<position){
+                            index+=1
+                            current=current.next
+                        }
+                        current.previous.next=current.next
+                        current.next.previous=current.previous
+                    }
+                } 
+                this.length-=1
+                return current.data
+            }
+            //remove移除某元素
+            doubleList.prototype.remove=(data)=>{
+                return this.removeAt(this.indexof(data))
+            }
+            //
+            }
+        let b=new doubleList()
+        b.append(23)
+        b.append(457)
+        b.append(90)
+        b.append(43)
+        console.log(b)
+        // console.log(b.toString())
+        // console.log(b.forwordToStr())
+        // console.log(b.insert(2,999))
+        // console.log(b.update(0,1))
+        console.log(b.toString())
+        console.log(b.remove(457))
+        console.log(b.toString())
+        
+    </script>
+</body>
+</html>

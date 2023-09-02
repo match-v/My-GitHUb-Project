@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Stack(){//封装栈类
+
+            this.items=[]
+
+            Stack.prototype.push=function(element){//常选择直接挂在类上，而不是类的实例上
+                this.items.push(element)
+            }
+            Stack.prototype.pop = () => {
+                return this.items.pop()//出栈 数组的pop方法本来就是取出的最后一个元素
+            }
+            Stack.prototype.peek = () => {//查看栈顶元素
+                return this.items[this.items.length - 1]
+            }
+            Stack.prototype.isEmpty = () => {//判断栈是否为空
+                return this.items.length == 0 
+            }
+            Stack.prototype.size=()=>{//栈的长度
+                return this.items.length
+            }
+            Stack.prototype.toString=()=>{//输出字符串形式的数组
+                let str=''
+                for(let i of this.items){
+                    str=str+i+" "//字符串拼接
+                }
+                return str
+            }
+        }
+
+        let s=new Stack()
+        s.push(18)
+        s.push(20)
+        s.push(21)
+        s.push(45)
+        console.log(s.items)//打印数组
+        s.pop()
+        console.log(s.toString())//打印字符串形式数组元素
+        console.log(typeof(s.toString()))//检验数据类型
+
+        //十进制转二进制
+        let dec2=(num)=>{
+            let d=new Stack()//栈对象
+            while(num>0){
+            d.push(num%2)//压栈
+            num=Math.floor(num/2)
+            }
+
+            let res=""
+            //好奇怪啊，，为什么我先用len=d.items.length接一下就不行
+            //是因为while循环里面的参数？
+            //因为没带分号!!!!!无语
+            let len=d.items.length;
+            while(len !==0 ){
+                res=res+d.pop()
+            }
+            return res
+        }
+        console.log(dec2(255))
+
+        
+    </script>
+</body>
+</html>

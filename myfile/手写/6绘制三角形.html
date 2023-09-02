@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .x {
+            width: 0;
+            height: 0;
+            border-left: 100px transparent solid;
+            border-top: 100px black solid;
+            border-right: 100px transparent solid; 
+            
+        } 
+        /* 优化代码:不需要把四个borde都设置一遍，只需要设置你想要画的三角形所需要的三条边border就可以， */
+       
+
+        /*源代码
+         .x{
+            width: 0;
+            height: 0;
+            border: 50px solid;
+            border-bottom-color: blue;
+            border-top-color: transparent;
+            border-left-color:transparent;
+            border-right-color:transparent;
+        } */
+    </style>
+</head>
+<body>
+    <div class="x"></div>
+</body>
+</html>
